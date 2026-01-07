@@ -26,3 +26,11 @@ async def goal(req: dict):
 @app.get("/status/{goal_id}")
 async def status(goal_id: str):
     return {"status": "pending", "goal_id": goal_id}
+
+
+@app.get("/")
+async def root():
+    return {
+        "message": "Agent backend is running",
+        "available_endpoints": ["/goal", "/status/{goal_id}"]
+    }

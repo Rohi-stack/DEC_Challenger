@@ -17,3 +17,9 @@ credentials.json
 
 # OS specific junk
 .DS_Store
+
+
+echo "backend/.env" >> .gitignore
+git add .gitignore
+git commit -m "Remove env file and ignore secrets"
+
