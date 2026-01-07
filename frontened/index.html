@@ -198,7 +198,7 @@
         }
 
         // --- COMMAND LOGIC ---
-        async function processCommand() {
+async function processCommand() {
 
     const goalText = document.getElementById('user_input').value;
     const resultCard = document.getElementById('result-card');
@@ -225,7 +225,8 @@
 
         const data = await response.json();
 
-        resultText.innerText = "Agent accepted your request. Goal ID: " + data.goal_id;
+        resultText.innerText =
+            "Agent accepted your request. Goal ID: " + data.goal_id;
 
     } catch (err) {
         resultText.innerText = "Error connecting to backend.";
