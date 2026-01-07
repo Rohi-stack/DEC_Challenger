@@ -21,6 +21,7 @@ app.post('/goal', async (req, res) => {
 
     // fire and forget execution
     executeSteps(goalId);
+    
 
     res.json({
         goal_id: goalId
