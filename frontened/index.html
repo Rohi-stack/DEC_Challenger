@@ -199,24 +199,40 @@
 
         // --- COMMAND LOGIC ---
         async function processCommand() {
-            const input = document.getElementById('user_input').value.toLowerCase();
-            const resultCard = document.getElementById('result-card');
-            const resultText = document.getElementById('result-text');
 
-            if (!accessToken) {
-                alert("Please sign in first to use Hackathon PPA features.");
-                return;
-            }
+    const goalText = document.getElementById('user_input').value;
+    const resultCard = document.getElementById('result-card');
+    const resultText = document.getElementById('result-text');
 
-            if (input.includes("meet") || input.includes("meeting")) {
-                resultText.innerHTML = "Creating your secure meeting link...";
-                resultCard.style.display = "block";
-                await createGoogleMeet();
-            } else {
-                resultText.innerText = "Command not recognized. Try typing 'create meeting'.";
-                resultCard.style.display = "block";
-            }
-        }
+    if (!accessToken) {
+        alert("Please sign in first.");
+        return;
+    }
+
+    resultText.innerText = "Sending goal to AI agent...";
+    resultCard.style.display = "block";
+
+    try {
+
+        const response = await fetch('http://localhost:3000/goal', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                goal: goalText,
+                user_id: document.getElementById('user_name').innerText
+            })
+        });
+
+        const data = await response.json();
+
+        resultText.innerText = "Agent accepted your request. Goal ID: " + data.goal_id;
+
+    } catch (err) {
+        resultText.innerText = "Error connecting to backend.";
+        console.error(err);
+    }
+}
+
 
         async function createGoogleMeet() {
             const event = {
