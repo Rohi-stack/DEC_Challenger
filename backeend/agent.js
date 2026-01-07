@@ -78,5 +78,5 @@ async function executePlanWithN8N(steps, goalId) {
         });
     }
 }
-
+    
 module.exports = { processGoal };
