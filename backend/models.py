@@ -8,7 +8,6 @@ class GoalRequest(BaseModel):
 
 
 
-
 # Add a schema to represent goals and steps.
 
 # For example:

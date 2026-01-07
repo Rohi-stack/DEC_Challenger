@@ -1,7 +1,7 @@
-class GoalPlanner:
-    def plan(self, text):
-        # OpenAI API call
-        return ["step1", "step2"]
+# class GoalPlanner:
+#     def plan(self, text):
+#         # OpenAI API call
+#         return ["step1", "step2"]
 
 
 from openai import OpenAI
@@ -24,3 +24,17 @@ class GoalPlanner:
         steps = steps_text.split("\n")
 
         return steps
+
+
+from backend.tools.gmail import send_email
+from backend.tools.calendar import create_event
+
+class GoalExecutor:
+    def execute(self, goal_id):
+        steps = get_steps(goal_id)
+        for s in steps:
+            # call tools according to step text
+            pass
+        return True
+    
+
