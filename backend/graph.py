@@ -4,6 +4,10 @@ from langchain_openai import ChatOpenAI
 from state import AgentState
 from prompts import DECISION_PROMPT
 
+import dotenv
+dotenv.load_dotenv()
+
+
 llm = ChatOpenAI(model="gpt-4o", temperature=0)
 
 def observe(state: AgentState):
