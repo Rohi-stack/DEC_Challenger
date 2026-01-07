@@ -53,25 +53,38 @@ function onLoginSuccess() {
 }
 
 async function processCommand() {
-    const inputField = document.getElementById('user_input');
-    const input = inputField.value.toLowerCase() || "meet"; // Default to meet if triggered by button
-    const resultCard = document.getElementById('result-card');
-    const resultContent = document.getElementById('result-content');
 
-    if (!accessToken) {
-        alert("Please click 'Sign In' at the top right first.");
+    const inputBox = document.getElementById("user_input");
+    const messageText = inputBox.value.trim();
+
+    if (!messageText) {
+        console.log("Empty input");
         return;
     }
 
-    resultCard.style.display = "block";
-    resultContent.innerHTML = "<p style='color:#94a3b8'>Processing command...</p>";
+    const payload = {
+        text: messageText
+    };
 
-    if (input.includes("meet") || input.includes("meeting")) {
-        await createGoogleMeet();
-    } else {
-        resultContent.innerHTML = "<p>Command not recognized. Try typing <b>'create meeting'</b>.</p>";
+    try {
+        const response = await fetch("http://127.0.0.1:3000/message", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        console.log("Saved:", data);
+
+        inputBox.value = "";
+
+    } catch (err) {
+        console.log("Error sending message", err);
     }
 }
+
 
 async function createGoogleMeet() {
     const resultContent = document.getElementById('result-content');
