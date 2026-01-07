@@ -29,3 +29,14 @@ def get_all_messages():
     conn.close()
 
     return rows
+
+# save_goal(text)
+
+# save_steps(goal_id, steps)
+
+# Inside databases.py, add:
+
+# goals table
+
+# steps table with goal_id foreign key
+
