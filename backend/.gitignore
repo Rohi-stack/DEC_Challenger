@@ -1,0 +1,26 @@
+# Environment variables (SECRETS)
+.env
+
+# Node dependencies if you still have any JS parts
+node_modules/
+
+# Python cache directories
+__pycache__/
+*.pyc
+
+# Uvicorn / FastAPI runtime logs
+logs/
+*.log
+
+# Any local credential files
+credentials.json
+
+# OS specific junk
+.DS_Store
+
+
+echo "backend/.env" >> .gitignore
+git add .gitignore
+git commit -m "Remove env file and ignore secrets"
+
+
