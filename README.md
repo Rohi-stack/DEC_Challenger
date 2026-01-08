@@ -154,7 +154,7 @@ POST /transcript
 * Chrome extension UI polish
 * Export summaries (PDF / Docs)
 * Slack or webhook integrations
-
+* LinkedIn integration, updating user for new job postings
 ---
 
 **Built for hackathon use with clarity, testability, and extensibility in mind.**
