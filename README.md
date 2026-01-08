@@ -1,69 +1,234 @@
 ### DEC_Challenger
 
- ## INTRODUCTION 
- An Autonomous AI Agent designed to help users manage meetings, reminders, and career opportunities with minimal human input.
-This agent automatically summarizes Google Meet sessions, sends emails, sets meeting reminders, and tracks internship & job notifications from platforms like LinkedIn.
+# Hackathon PPA – Productivity & Meeting Assistant
 
+Hackathon PPA is an end-to-end **AI-powered productivity assistant** that integrates with **Google Meet, Google Calendar, and Gmail** to automatically:
 
-## 🚀 Features
-# 1. Google Meet Summary Automation
+- Capture meeting transcripts
+- Generate structured meeting summaries using LLMs
+- Email summaries to all attendees
+- Show real-time notifications on a dashboard
+- Track goals, steps, and meeting actions
 
-Fetches Google Meet transcripts
+This project is designed as a **modular, event-driven system** with a clean separation between:
+- Data capture (Chrome Extension)
+- Intelligence & orchestration (Backend + LangGraph)
+- User interaction (Frontend Dashboard)
 
-Uses LLM (OpenAI / other) to generate concise summaries
+---
 
-Automatically emails the summary to the user
+## 🧠 Core Features
 
-# 2. Smart Meeting Reminders
+- ✅ Google Meet transcript ingestion
+- ✅ AI-powered meeting summarization
+- ✅ Automatic email dispatch to attendees
+- ✅ Real-time notification system
+- ✅ Goal planning & execution pipeline
+- ✅ Clean API-driven backend
+- ✅ Chrome Extension for automation
+- ✅ Dark-mode dashboard UI
 
-Reads Google Calendar events
+---
 
-Sends reminders to the host before the meeting starts
+## 🏗️ Project Architecture
 
-Prevents missed or delayed meetings
+Chrome Extension
+↓
+POST /transcript
+↓
+LangGraph (decide → act)
+↓
+Summarize → Email → Save Notification
+↓
+Frontend Dashboard (Notifications + Recent Summary)
 
-# 3. Internship & Job Notification Alerts
+yaml
+Copy code
 
-Tracks internship/job notifications (LinkedIn & other platforms) ongoing 
+---
 
-Filters relevant opportunities
+## 📁 Project Structure
 
-Sends email alerts to the user
+DECHack/
+├── backend/
+│ ├── tools/ # summarizer, gmail, calendar, notification tools
+│ ├── agent.py # GoalPlanner & GoalExecutor
+│ ├── graph.py # LangGraph orchestration
+│ ├── databases.py # SQLite persistence layer
+│ ├── models.py # Pydantic schemas
+│ ├── state.py # AgentState definition
+│ └── config.py # Environment configuration
+│
+├── frontend/
+│ ├── index.html
+│ ├── styles.css
+│ └── script.js
+│
+├── extension/ # Chrome Extension (Meet integration)
+│ ├── manifest.json
+│ ├── content.js
+│ ├── background.js
+│ └── popup.html
+│
+├── test/ # End-to-end & unit tests
+│ ├── test_db.py
+│ ├── test_summarizer.py
+│ ├── test_gmail.py
+│ ├── test_calendar.py
+│ ├── test_notifications.py
+│ └── test_transcript.py
+│
+├── main.py # FastAPI entrypoint
+├── requirements.txt
+└── README.md
 
-# 4. Autonomous Task Execution
+yaml
+Copy code
 
-Works with minimal human intervention
+---
 
-Runs on scheduled background jobs
+## ⚙️ Tech Stack
 
-Decision-making handled by AI agent logic
+- **Backend**: FastAPI, LangGraph, LangChain
+- **LLM**: OpenAI (via langchain-openai)
+- **Database**: SQLite
+- **Frontend**: HTML, CSS, Vanilla JS
+- **Extension**: Chrome Extension (Manifest V3)
+- **Auth**: Google OAuth 2.0
+- **Testing**: Python test scripts
 
-🛠️ Installation & Setup
-1️⃣ Clone Repository
-git clone https://github.com/your-username/ai-productivity-agent.git
-cd ai-productivity-agent
+---
 
-2️⃣ Create Virtual Environment
-python -m venv venv
-source venv/bin/activate # Linux / Mac
-venv\Scripts\activate # Windows
+## 🔐 Environment Setup
 
-3️⃣ Install Dependencies
+Create a `.env` file (do NOT commit it):
+
+```env
+OPENAI_API_KEY=your_openai_key_here
+Make sure .env is listed in .gitignore.
+
+📦 Installation
+1️⃣ Clone repository
+bash
+Copy code
+git clone https://github.com/Rohi-stack/DEC_Challenger.git
+cd DECHack
+2️⃣ Install dependencies
+bash
+Copy code
 pip install -r requirements.txt
-
-4️⃣ Environment Variables
-
-Create a .env file:
-
-OPENAI_API_KEY=your_openai_key
-GOOGLE_CLIENT_ID=your_client_id
-GOOGLE_CLIENT_SECRET=your_client_secret
-EMAIL_ADDRESS=your_email
-EMAIL_PASSWORD=your_password
-
-▶️ Run the Project
+3️⃣ Start backend server
+bash
+Copy code
 uvicorn main:app --reload
+Backend runs at:
 
-Open browser:
-
+cpp
+Copy code
 http://127.0.0.1:8000
+🖥️ Frontend Usage
+Open frontend/index.html using Live Server (VS Code recommended):
+
+cpp
+Copy code
+http://127.0.0.1:5500
+Features:
+
+Google Sign-In
+
+Command input (e.g., “create meeting”)
+
+Notification bell with unread count
+
+Recent meeting summary display
+
+🧩 Chrome Extension Setup
+Open Chrome → chrome://extensions
+
+Enable Developer Mode
+
+Click Load unpacked
+
+Select the extension/ folder
+
+The extension:
+
+Reads live captions from Google Meet
+
+Sends transcript to backend /transcript
+
+Triggers summary + email + notification pipeline
+
+🔁 Workflow Example
+User joins a Google Meet
+
+Chrome Extension captures captions
+
+Transcript is sent to backend:
+
+bash
+Copy code
+POST /transcript
+LangGraph decides actions:
+
+summarize_meeting
+
+send_email
+
+Summary is generated
+
+Emails sent to attendees
+
+Notification stored in DB
+
+Dashboard updates in real time
+
+🧪 Testing
+Run tests individually (recommended):
+
+bash
+Copy code
+PYTHONPATH=. python test/test_db.py
+PYTHONPATH=. python test/test_summarizer.py
+PYTHONPATH=. python test/test_gmail.py
+PYTHONPATH=. python test/test_transcript.py
+🚀 Why This Project Matters
+This is not a demo script — it is a production-style AI system that demonstrates:
+
+Event-driven agent design
+
+Tool-using LLM orchestration
+
+Real OAuth + API integrations
+
+Clean frontend-backend separation
+
+Practical AI for real workflows
+
+📌 Future Improvements
+Automatic meeting end detection
+
+Real-time transcript streaming
+
+Multi-user dashboards
+
+Production OAuth verification
+
+Notification read/unread UX polish
+
+👨‍💻 Authors
+Built as part of a hackathon project by the DEC team.
+
+
+
+
+
+
+
+
+
+
+
+
+
+ChatGPT can make mistakes. Check important info. See Cookie Preferences.
