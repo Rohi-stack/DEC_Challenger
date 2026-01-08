@@ -50,9 +50,19 @@
             </svg>
             Meeting
         </a>
+        <div class="sidebar-header">
+            <span class="sidebar-title">Notifications</span>
+            <span class="notif-bell">🔔</span>
+          </div>
+          
     </div>
 
     <div class="auth-container">
+        <div class="notif-wrapper">
+            <span id="notif-bell" class="notif-bell">🔔</span>
+            <span id="notif-count" class="notif-count hidden">0</span>
+        </div>
+        
         <button id="authorize_button" class="google-btn" onclick="handleAuth()">
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="18" alt="G">
             Sign In
@@ -79,13 +89,14 @@
             <input type="text" id="user_input" class="search-input" placeholder="Type 'create meeting'..."
                 onkeydown="if(event.key === 'Enter') processCommand()">
             <button class="action-btn" onclick="processCommand()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                <svg width="36" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
             </button>
         </div>
+        <div id="recent-summary" class="recent-summary hidden"></div>
 
         <div id="result-card">
             <div id="result-content"></div>

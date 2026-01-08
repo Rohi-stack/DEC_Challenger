@@ -109,7 +109,12 @@
             top: 25px;
             right: 25px;
             z-index: 1000;
+        
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
+        
 
         .google-btn {
             background: var(--card-bg);
@@ -215,8 +220,22 @@
             width: 100%;
             padding: 16px 0;
             font-size: 18px;
-            color: white;
+            /* color: white;
+             */
+             background: transparent;      /* key */
+            color: var(--text-main);       /* white text */
+            caret-color: var(--accent-color);
+            /* background: transparent; */
+        }
+
+        .search-input:focus {
             background: transparent;
+            color: var(--text-main);
+        }
+        
+        /* Placeholder styling */
+        .search-input::placeholder {
+            color: var(--text-muted);
         }
 
         .action-btn {
@@ -285,3 +304,86 @@
             }
         }
     
+        .sidebar-header {
+            margin-top: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+          }
+          
+          .notif-bell {
+            cursor: pointer;
+            font-size: 0.9rem;
+            opacity: 0.8;
+          }
+          
+          .notif-bell:hover {
+            transform: scale(1.1);
+            opacity: 1;
+          }
+
+          .notif-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notif-bell {
+
+            font-size: 22px;
+        }
+        
+        .notif-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        .recent-summary {
+            margin-top: 24px;
+            padding: 20px 22px;
+            /* background: var(--card-bg);
+             */
+             background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            border: 1px solid #334155;
+        
+            color: var(--text-main);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .recent-summary strong {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            opacity: 0.8;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        
+        .summary-text {
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        
+        .recent-summary.hidden {
+            display: none;
+        }
+        
+        

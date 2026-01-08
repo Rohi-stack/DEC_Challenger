@@ -1,6 +1,7 @@
-def send_notification(text):
+async def create_notification(goal_id: str, summary: str):
+
     return {
-        "tool": "notification",
-        "action": "notified user",
-        "text": text
+        "goal_id": goal_id,
+        "message": summary,
+        "status": "created"
     }

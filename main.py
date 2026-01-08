@@ -1,21 +1,39 @@
 from fastapi import FastAPI
-from backend.models import MessageRequest, GoalRequest
-from backend.databases import save_to_db, get_all_messages, init_db
-from backend.agent import GoalPlanner
+from fastapi.middleware.cors import CORSMiddleware
+from backend.databases import get_notifications, mark_notification_read
+
+from backend.models import MessageRequest, GoalRequest, TranscriptRequest
+from backend.graph import agent_graph
+from backend.databases import init_db, get_notifications
 from backend.databases import (
-    save_goal,
-    save_steps,
-    get_steps,
+    init_db,
     save_to_db,
     get_all_messages,
-    init_db
+    save_goal,
+    save_steps,
+    get_steps
 )
+from backend.agent import GoalPlanner, GoalExecutor
 
 app = FastAPI()
 
+# ✅ CORS goes HERE
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize database once at startup
 init_db()
 
 planner = GoalPlanner()
+executor = GoalExecutor()
 
 @app.get("/")
 def home():
@@ -48,32 +66,71 @@ def create_goal(goal: GoalRequest):
 @app.get("/steps/{goal_id}")
 def show_steps(goal_id: int):
     data = get_steps(goal_id)
-    return {"goal_id": goal_id, "items": data}
-
-
-from backend.agent import GoalExecutor
-executor = GoalExecutor()
+    return {
+        "goal_id": goal_id,
+        "items": data
+    }
 
 @app.post("/execute/{goal_id}")
 def execute_goal(goal_id: int):
 
-    result = executor.execute(goal_id)
+    executor.execute(goal_id)
 
     return {
         "status": "executed",
         "goal_id": goal_id
     }
 
-from backend.agent import GoalExecutor
-executor = GoalExecutor()
 
-@app.post("/execute/{goal_id}")
-def execute_goal(goal_id: int):
+from backend.graph import agent_graph
 
-    result = executor.execute(goal_id)
+@app.post("/transcript")
+async def receive_transcript(req: TranscriptRequest):
+
+    state = {
+        "event_type": "meeting_transcript",
+        "event_payload": {
+            "goal_id": req.goal_id,
+            "transcript": req.transcript,
+            "attendees": req.attendees,
+            "access_token": req.access_token
+        },
+        "decision": None,
+        "action_result": None,
+        "memory_entry": None
+    }
+
+    result = agent_graph.invoke(state)
 
     return {
-        "status": "executed",
-        "goal_id": goal_id
+        "status": "processed",
+        "goal_id": req.goal_id,
+        "decision": result.get("decision"),
+        "notification": result.get("action_result")
     }
-# POST /execute/{goal_id}
+
+
+from backend.databases import get_notifications
+
+@app.get("/notifications")
+def list_notifications():
+    data = get_notifications()
+    return {
+        "count": len(data),
+        "items": data
+    }
+
+
+@app.get("/notifications")
+def list_notifications():
+    data = get_notifications()
+    return {
+        "count": len(data),
+        "items": data
+    }
+
+
+@app.post("/notifications/{notification_id}/read")
+def read_notification(notification_id: int):
+    mark_notification_read(notification_id)
+    return {"status": "ok"}
