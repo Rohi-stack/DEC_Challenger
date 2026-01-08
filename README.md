@@ -1,234 +1,160 @@
-### DEC_Challenger
+# Productivity Assistant (Hackathon PPA)
 
-# Hackathon PPA – Productivity & Meeting Assistant
+Chrome Extension → **POST /transcript** → **LangGraph (decide → act)** → **Summarize → Email → Save Notification** → **Frontend Dashboard**
 
-Hackathon PPA is an end-to-end **AI-powered productivity assistant** that integrates with **Google Meet, Google Calendar, and Gmail** to automatically:
-
-- Capture meeting transcripts
-- Generate structured meeting summaries using LLMs
-- Email summaries to all attendees
-- Show real-time notifications on a dashboard
-- Track goals, steps, and meeting actions
-
-This project is designed as a **modular, event-driven system** with a clean separation between:
-- Data capture (Chrome Extension)
-- Intelligence & orchestration (Backend + LangGraph)
-- User interaction (Frontend Dashboard)
+This project captures Google Meet transcripts via a Chrome extension, summarizes meetings using an LLM, emails the summary to attendees, and surfaces notifications and recent summaries in a frontend dashboard.
 
 ---
 
-## 🧠 Core Features
+## ✨ Features
 
-- ✅ Google Meet transcript ingestion
-- ✅ AI-powered meeting summarization
-- ✅ Automatic email dispatch to attendees
-- ✅ Real-time notification system
-- ✅ Goal planning & execution pipeline
-- ✅ Clean API-driven backend
-- ✅ Chrome Extension for automation
-- ✅ Dark-mode dashboard UI
-
----
-
-## 🏗️ Project Architecture
-
-Chrome Extension
-↓
-POST /transcript
-↓
-LangGraph (decide → act)
-↓
-Summarize → Email → Save Notification
-↓
-Frontend Dashboard (Notifications + Recent Summary)
-
-yaml
-Copy code
+* 🔔 Notification bell with unread count
+* 🧾 Recent meeting summary display
+* 🧠 LangGraph-based agent (decide → act)
+* ✉️ Automated email summaries to attendees
+* 🧩 Chrome Extension (Manifest V3) for Google Meet captions
+* 🗃️ SQLite persistence (messages, goals, steps, notifications)
+* 🧪 End-to-end and unit tests
 
 ---
 
 ## 📁 Project Structure
 
+```text
 DECHack/
 ├── backend/
-│ ├── tools/ # summarizer, gmail, calendar, notification tools
-│ ├── agent.py # GoalPlanner & GoalExecutor
-│ ├── graph.py # LangGraph orchestration
-│ ├── databases.py # SQLite persistence layer
-│ ├── models.py # Pydantic schemas
-│ ├── state.py # AgentState definition
-│ └── config.py # Environment configuration
-│
+│   ├── tools/                 # summarizer, gmail, calendar, notification tools
+│   ├── agent.py               # GoalPlanner & GoalExecutor
+│   ├── graph.py               # LangGraph orchestration
+│   ├── databases.py           # SQLite persistence layer
+│   ├── models.py              # Pydantic schemas
+│   ├── state.py               # AgentState definition
+│   ├── config.py              # Environment configuration
+│   └── __init__.py
 ├── frontend/
-│ ├── index.html
-│ ├── styles.css
-│ └── script.js
-│
-├── extension/ # Chrome Extension (Meet integration)
-│ ├── manifest.json
-│ ├── content.js
-│ ├── background.js
-│ └── popup.html
-│
-├── test/ # End-to-end & unit tests
-│ ├── test_db.py
-│ ├── test_summarizer.py
-│ ├── test_gmail.py
-│ ├── test_calendar.py
-│ ├── test_notifications.py
-│ └── test_transcript.py
-│
-├── main.py # FastAPI entrypoint
+│   ├── index.html
+│   ├── styles.css
+│   └── script.js
+├── extension/                 # Chrome Extension (Meet integration)
+│   ├── manifest.json
+│   ├── content.js
+│   └── popup.html
+├── test/                      # End-to-end & unit tests
+│   ├── test_db.py
+│   ├── test_summarizer.py
+│   ├── test_gmail.py
+│   ├── test_calendar.py
+│   ├── test_notifications.py
+│   └── test_transcript.py
+├── main.py                    # FastAPI entrypoint
 ├── requirements.txt
 └── README.md
-
-yaml
-Copy code
+```
 
 ---
 
-## ⚙️ Tech Stack
+## 🧰 Tech Stack
 
-- **Backend**: FastAPI, LangGraph, LangChain
-- **LLM**: OpenAI (via langchain-openai)
-- **Database**: SQLite
-- **Frontend**: HTML, CSS, Vanilla JS
-- **Extension**: Chrome Extension (Manifest V3)
-- **Auth**: Google OAuth 2.0
-- **Testing**: Python test scripts
+* **Backend**: FastAPI, LangGraph, LangChain
+* **LLM**: OpenAI (via `langchain-openai`)
+* **Database**: SQLite
+* **Frontend**: HTML, CSS, Vanilla JavaScript
+* **Extension**: Chrome Extension (Manifest V3)
+* **Auth**: Google OAuth 2.0
+* **Testing**: Python test scripts
 
 ---
 
-## 🔐 Environment Setup
+## ⚙️ Environment Setup
 
-Create a `.env` file (do NOT commit it):
+Create a `.env` file **(do NOT commit this file)**:
 
 ```env
-OPENAI_API_KEY=your_openai_key_here
-Make sure .env is listed in .gitignore.
+OPENAI_API_KEY=your_openai_key
+```
 
-📦 Installation
-1️⃣ Clone repository
-bash
-Copy code
-git clone https://github.com/Rohi-stack/DEC_Challenger.git
-cd DECHack
-2️⃣ Install dependencies
-bash
-Copy code
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
-3️⃣ Start backend server
-bash
-Copy code
+```
+
+Run the backend:
+
+```bash
 uvicorn main:app --reload
-Backend runs at:
+```
 
-cpp
-Copy code
-http://127.0.0.1:8000
-🖥️ Frontend Usage
-Open frontend/index.html using Live Server (VS Code recommended):
+---
 
-cpp
-Copy code
-http://127.0.0.1:5500
-Features:
+## 🧪 Testing
 
-Google Sign-In
+Run tests from the project root:
 
-Command input (e.g., “create meeting”)
-
-Notification bell with unread count
-
-Recent meeting summary display
-
-🧩 Chrome Extension Setup
-Open Chrome → chrome://extensions
-
-Enable Developer Mode
-
-Click Load unpacked
-
-Select the extension/ folder
-
-The extension:
-
-Reads live captions from Google Meet
-
-Sends transcript to backend /transcript
-
-Triggers summary + email + notification pipeline
-
-🔁 Workflow Example
-User joins a Google Meet
-
-Chrome Extension captures captions
-
-Transcript is sent to backend:
-
-bash
-Copy code
-POST /transcript
-LangGraph decides actions:
-
-summarize_meeting
-
-send_email
-
-Summary is generated
-
-Emails sent to attendees
-
-Notification stored in DB
-
-Dashboard updates in real time
-
-🧪 Testing
-Run tests individually (recommended):
-
-bash
-Copy code
+```bash
 PYTHONPATH=. python test/test_db.py
 PYTHONPATH=. python test/test_summarizer.py
 PYTHONPATH=. python test/test_gmail.py
+PYTHONPATH=. python test/test_calendar.py
+PYTHONPATH=. python test/test_notifications.py
 PYTHONPATH=. python test/test_transcript.py
-🚀 Why This Project Matters
-This is not a demo script — it is a production-style AI system that demonstrates:
+```
 
-Event-driven agent design
+---
 
-Tool-using LLM orchestration
+## 🧩 Chrome Extension Setup
 
-Real OAuth + API integrations
+1. Open Chrome → `chrome://extensions`
+2. Enable **Developer Mode**
+3. Click **Load unpacked**
+4. Select the `extension/` folder
 
-Clean frontend-backend separation
+### What the extension does
 
-Practical AI for real workflows
+* Reads live captions from Google Meet
+* Sends transcript to backend `/transcript`
+* Triggers summarize → email → notification pipeline
 
-📌 Future Improvements
-Automatic meeting end detection
+---
 
-Real-time transcript streaming
+## 🔄 Workflow Example
 
-Multi-user dashboards
+1. User joins a Google Meet
+2. Chrome Extension captures live captions
+3. Transcript is sent to backend:
 
-Production OAuth verification
+```http
+POST /transcript
+```
 
-Notification read/unread UX polish
+4. LangGraph decides actions:
 
-👨‍💻 Authors
-Built as part of a hackathon project by the DEC team.
+* `summarize_meeting`
+* `send_email`
 
+5. Summary is generated
+6. Emails are sent to attendees
+7. Notification is stored in DB
+8. Frontend dashboard updates (bell + recent summary)
 
+---
 
+## 🧭 Notes
 
+* CORS is configured for local frontend (`127.0.0.1:5500`)
+* OAuth tokens are requested client-side and passed securely
+* All new features are additive and do not break existing flows
 
+---
 
+## 🚀 Next Improvements
 
+* Mark notifications as read
+* Meeting history page
+* Chrome extension UI polish
+* Export summaries (PDF / Docs)
+* Slack or webhook integrations
 
+---
 
-
-
-
-
-ChatGPT can make mistakes. Check important info. See Cookie Preferences.
+**Built for hackathon use with clarity, testability, and extensibility in mind.**
